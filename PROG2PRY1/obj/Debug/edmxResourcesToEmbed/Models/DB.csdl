@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="T_Categoria">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="T_Productos" Relationship="Self.FK_T_Productos_T_Categoria" FromRole="T_Categoria" ToRole="T_Productos" />
+  </EntityType>
+  <EntityType Name="T_Clientes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Telefono" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="T_Productos" Relationship="Self.FK_T_Productos_T_Clientes" FromRole="T_Clientes" ToRole="T_Productos" />
+  </EntityType>
+  <EntityType Name="T_Productos">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Precio" Type="Int32" Nullable="false" />
+    <Property Name="ID_Categoria" Type="Int32" Nullable="false" />
+    <Property Name="ID_Cliente" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="T_Categoria" Relationship="Self.FK_T_Productos_T_Categoria" FromRole="T_Productos" ToRole="T_Categoria" />
+    <NavigationProperty Name="T_Clientes" Relationship="Self.FK_T_Productos_T_Clientes" FromRole="T_Productos" ToRole="T_Clientes" />
+  </EntityType>
+  <Association Name="FK_T_Productos_T_Categoria">
+    <End Role="T_Categoria" Type="Self.T_Categoria" Multiplicity="1" />
+    <End Role="T_Productos" Type="Self.T_Productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_Categoria">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="T_Productos">
+        <PropertyRef Name="ID_Categoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_T_Productos_T_Clientes">
+    <End Role="T_Clientes" Type="Self.T_Clientes" Multiplicity="1" />
+    <End Role="T_Productos" Type="Self.T_Productos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_Clientes">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="T_Productos">
+        <PropertyRef Name="ID_Cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="T_Categoria" EntityType="Self.T_Categoria" />
+    <EntitySet Name="T_Clientes" EntityType="Self.T_Clientes" />
+    <EntitySet Name="T_Productos" EntityType="Self.T_Productos" />
+    <AssociationSet Name="FK_T_Productos_T_Categoria" Association="Self.FK_T_Productos_T_Categoria">
+      <End Role="T_Categoria" EntitySet="T_Categoria" />
+      <End Role="T_Productos" EntitySet="T_Productos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_T_Productos_T_Clientes" Association="Self.FK_T_Productos_T_Clientes">
+      <End Role="T_Clientes" EntitySet="T_Clientes" />
+      <End Role="T_Productos" EntitySet="T_Productos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
